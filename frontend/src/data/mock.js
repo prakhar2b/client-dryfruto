@@ -432,7 +432,7 @@ export const heroSlides = [
     title: "Premium Quality Dry Fruits",
     subtitle: "Live With Health",
     description: "Discover our handpicked selection of premium dry fruits, nuts, and seeds",
-    image: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=1920&h=800&fit=crop",
+    image: "https://images.pexels.com/photos/86649/pexels-photo-86649.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&fit=crop",
     cta: "Shop Now"
   },
   {
@@ -440,7 +440,7 @@ export const heroSlides = [
     title: "Festival Gift Hampers",
     subtitle: "Celebrate with Health",
     description: "Beautiful gift boxes perfect for every occasion",
-    image: "https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=1920&h=800&fit=crop",
+    image: "https://images.pexels.com/photos/4033324/pexels-photo-4033324.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&fit=crop",
     cta: "View Collection"
   },
   {
@@ -448,7 +448,7 @@ export const heroSlides = [
     title: "Healthy Seeds & Makhana",
     subtitle: "Nature's Best",
     description: "Explore our range of nutrient-rich seeds and fox nuts",
-    image: "https://images.unsplash.com/photo-1615485500704-8e990f9900f7?w=1920&h=800&fit=crop",
+    image: "https://images.pexels.com/photos/1295572/pexels-photo-1295572.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&fit=crop",
     cta: "Explore Now"
   }
 ];
