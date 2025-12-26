@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
 Backend API Tests for DryFruto E-commerce Application
-Testing bulk order settings functionality
+Testing bulk order settings and theme customizer functionality
 """
 
 import requests
 import json
 import sys
+import tempfile
+import os
 from typing import Dict, Any
 
 # Get backend URL from frontend .env file
