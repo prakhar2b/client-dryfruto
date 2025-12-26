@@ -1,9 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
-import { LOGO_URL, CONTACT_INFO, categories } from '../../data/mock';
+import { useData } from '../../context/DataContext';
 
 const Footer = () => {
+  const { categories, siteSettings } = useData();
+
+  const LOGO_URL = siteSettings.logo || "https://customer-assets.emergentagent.com/job_70b8c44d-b0eb-46ab-b798-c90870274405/artifacts/5olvlaa7_WhatsApp%20Image%202025-12-26%20at%2013.46.33.jpeg";
+  const callLink = `tel:+91${siteSettings.phone}`;
+
   return (
     <footer className="bg-[#2d1810] text-white" id="contact">
       {/* Main Footer */}
@@ -14,12 +19,12 @@ const Footer = () => {
             <Link to="/" className="flex items-center gap-3 mb-4">
               <img 
                 src={LOGO_URL} 
-                alt="DryFruto" 
+                alt={siteSettings.businessName} 
                 className="h-16 w-16 rounded-full object-cover border-2 border-amber-400"
               />
               <div>
-                <h2 className="text-xl font-bold">DryFruto</h2>
-                <p className="text-amber-300 italic text-sm">Live With Health</p>
+                <h2 className="text-xl font-bold">{siteSettings.businessName}</h2>
+                <p className="text-amber-300 italic text-sm">{siteSettings.slogan}</p>
               </div>
             </Link>
             <p className="text-gray-300 text-sm leading-relaxed mb-4">
@@ -92,8 +97,8 @@ const Footer = () => {
                 <Phone className="w-5 h-5 text-amber-400 mt-0.5" />
                 <div>
                   <p className="text-sm text-gray-400">Call us</p>
-                  <a href={CONTACT_INFO.callLink} className="text-white hover:text-amber-300 transition-colors">
-                    +91 {CONTACT_INFO.phone}
+                  <a href={callLink} className="text-white hover:text-amber-300 transition-colors">
+                    +91 {siteSettings.phone}
                   </a>
                 </div>
               </li>
@@ -101,8 +106,8 @@ const Footer = () => {
                 <Mail className="w-5 h-5 text-amber-400 mt-0.5" />
                 <div>
                   <p className="text-sm text-gray-400">Email us</p>
-                  <a href={`mailto:${CONTACT_INFO.email}`} className="text-white hover:text-amber-300 transition-colors">
-                    {CONTACT_INFO.email}
+                  <a href={`mailto:${siteSettings.email}`} className="text-white hover:text-amber-300 transition-colors">
+                    {siteSettings.email}
                   </a>
                 </div>
               </li>
@@ -110,7 +115,7 @@ const Footer = () => {
                 <MapPin className="w-5 h-5 text-amber-400 mt-0.5" />
                 <div>
                   <p className="text-sm text-gray-400">Visit us</p>
-                  <p className="text-white text-sm">{CONTACT_INFO.address}</p>
+                  <p className="text-white text-sm">{siteSettings.address}</p>
                 </div>
               </li>
             </ul>
@@ -123,7 +128,7 @@ const Footer = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-400 text-sm">
-              © 2025 DryFruto. All rights reserved.
+              © 2025 {siteSettings.businessName}. All rights reserved.
             </p>
             <div className="flex items-center gap-4">
               <img src="https://img.icons8.com/color/48/visa.png" alt="Visa" className="h-8" />
