@@ -356,6 +356,8 @@ class BackendTester:
         except Exception as e:
             self.log_test("Theme persistence verification", False, f"Error: {str(e)}")
             return False
+    
+    def test_persistence_verification(self) -> bool:
         """Test that bulk order changes persist by making a fresh GET request"""
         try:
             response = self.session.get(f"{self.backend_url}/site-settings")
