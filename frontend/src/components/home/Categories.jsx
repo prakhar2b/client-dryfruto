@@ -13,22 +13,22 @@ const Categories = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
           {categories.map((category) => (
             <Link
               key={category.id}
               to={`/products?category=${category.slug}`}
               className="group"
             >
-              <div className="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 text-center">
-                <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-4 border-amber-100 group-hover:border-amber-300 transition-colors">
+              <div className="bg-white border-2 border-gray-100 hover:border-amber-400 rounded-xl p-4 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center h-full flex flex-col items-center justify-center">
+                <div className="w-28 h-28 md:w-32 md:h-32 mx-auto mb-4 rounded-xl overflow-hidden bg-amber-50 p-2">
                   <img
                     src={category.icon}
                     alt={category.name}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
+                    className="w-full h-full object-cover rounded-lg transform group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
-                <h3 className="font-semibold text-gray-800 group-hover:text-amber-700 transition-colors">
+                <h3 className="font-bold text-gray-800 group-hover:text-amber-700 transition-colors text-sm md:text-base">
                   {category.name}
                 </h3>
               </div>
