@@ -635,6 +635,19 @@ class BackendTester:
         # Test 9: Theme Persistence
         self.test_theme_persistence_verification()
         
+        print("\n" + "=" * 60)
+        print("🎨 CSS CUSTOMIZER TESTS")
+        print("=" * 60)
+        
+        # Test 10: CSS Customizer Save Page Styles
+        self.test_css_customizer_save_page_styles()
+        
+        # Test 11: CSS Customizer Get Page Styles
+        css_settings = self.test_css_customizer_get_page_styles()
+        
+        # Test 12: CSS Customizer Persistence
+        self.test_css_customizer_persistence()
+        
         # Summary
         print("\n" + "=" * 60)
         print("📊 TEST SUMMARY")
