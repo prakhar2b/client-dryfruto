@@ -9,6 +9,12 @@ const Footer = () => {
   const LOGO_URL = siteSettings.logo || "https://customer-assets.emergentagent.com/job_70b8c44d-b0eb-46ab-b798-c90870274405/artifacts/5olvlaa7_WhatsApp%20Image%202025-12-26%20at%2013.46.33.jpeg";
   const callLink = `tel:+91${siteSettings.phone}`;
 
+  // Get colors from pageStyles or use defaults
+  const pageStyles = siteSettings.pageStyles?.global || {};
+  const footerBg = pageStyles.footerBg || pageStyles.headerBg || '#2d1810';
+  const footerText = pageStyles.footerText || '#fef3c7';
+  const footerLink = pageStyles.footerLink || pageStyles.accentColor || '#f59e0b';
+
   // Social media links from settings
   const socialLinks = [
     { icon: Facebook, link: siteSettings.facebookLink, label: 'Facebook' },
@@ -18,7 +24,7 @@ const Footer = () => {
   ].filter(social => social.link); // Only show links that are configured
 
   return (
-    <footer className="bg-[#2d1810] text-white" id="contact">
+    <footer style={{ backgroundColor: footerBg }} className="text-white" id="contact">
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -28,14 +34,15 @@ const Footer = () => {
               <img 
                 src={LOGO_URL} 
                 alt={siteSettings.businessName} 
-                className="h-16 w-16 rounded-full object-cover border-2 border-amber-400"
+                className="h-16 w-16 rounded-full object-cover border-2"
+                style={{ borderColor: footerLink }}
               />
               <div>
-                <h2 className="text-xl font-bold">{siteSettings.businessName}</h2>
-                <p className="text-amber-300 italic text-sm">{siteSettings.slogan}</p>
+                <h2 className="text-xl font-bold" style={{ color: footerText }}>{siteSettings.businessName}</h2>
+                <p className="italic text-sm" style={{ color: footerLink }}>{siteSettings.slogan}</p>
               </div>
             </Link>
-            <p className="text-gray-300 text-sm leading-relaxed mb-4">
+            <p className="text-sm leading-relaxed mb-4" style={{ color: footerText, opacity: 0.8 }}>
               Premium quality dry fruits, nuts, and seeds delivered to your doorstep. 
               We ensure freshness and quality in every pack.
             </p>
@@ -47,10 +54,11 @@ const Footer = () => {
                     href={social.link} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="w-10 h-10 bg-amber-700 hover:bg-amber-600 rounded-full flex items-center justify-center transition-colors"
+                    className="w-10 h-10 rounded-full flex items-center justify-center transition-colors hover:opacity-80"
+                    style={{ backgroundColor: footerLink }}
                     aria-label={social.label}
                   >
-                    <social.icon className="w-5 h-5" />
+                    <social.icon className="w-5 h-5" style={{ color: footerBg }} />
                   </a>
                 ))}
               </div>
@@ -59,35 +67,36 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-amber-300">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4" style={{ color: footerLink }}>Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-300 hover:text-amber-300 transition-colors text-sm">Home</Link>
+                <Link to="/" className="transition-colors text-sm hover:opacity-80" style={{ color: footerText }}>Home</Link>
               </li>
               <li>
-                <Link to="/bulk-order" className="text-gray-300 hover:text-amber-300 transition-colors text-sm">Bulk Order</Link>
+                <Link to="/bulk-order" className="transition-colors text-sm hover:opacity-80" style={{ color: footerText }}>Bulk Order</Link>
               </li>
               <li>
-                <Link to="/career" className="text-gray-300 hover:text-amber-300 transition-colors text-sm">Career</Link>
+                <Link to="/career" className="transition-colors text-sm hover:opacity-80" style={{ color: footerText }}>Career</Link>
               </li>
               <li>
-                <Link to="/about" className="text-gray-300 hover:text-amber-300 transition-colors text-sm">About Us</Link>
+                <Link to="/about" className="transition-colors text-sm hover:opacity-80" style={{ color: footerText }}>About Us</Link>
               </li>
               <li>
-                <a href="#contact" className="text-gray-300 hover:text-amber-300 transition-colors text-sm">Contact Us</a>
+                <a href="#contact" className="transition-colors text-sm hover:opacity-80" style={{ color: footerText }}>Contact Us</a>
               </li>
             </ul>
           </div>
 
           {/* Shop */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-amber-300">Shop</h3>
+            <h3 className="text-lg font-semibold mb-4" style={{ color: footerLink }}>Shop</h3>
             <ul className="space-y-2">
               {categories.map((cat) => (
                 <li key={cat.id}>
                   <Link 
                     to={`/products?category=${cat.slug}`} 
-                    className="text-gray-300 hover:text-amber-300 transition-colors text-sm"
+                    className="transition-colors text-sm hover:opacity-80"
+                    style={{ color: footerText }}
                   >
                     {cat.name}
                   </Link>
@@ -98,31 +107,31 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-amber-300">Contact Us</h3>
+            <h3 className="text-lg font-semibold mb-4" style={{ color: footerLink }}>Contact Us</h3>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <Phone className="w-5 h-5 text-amber-400 mt-0.5" />
+                <Phone className="w-5 h-5 mt-0.5" style={{ color: footerLink }} />
                 <div>
-                  <p className="text-sm text-gray-400">Call us</p>
-                  <a href={callLink} className="text-white hover:text-amber-300 transition-colors">
+                  <p className="text-sm" style={{ color: footerText, opacity: 0.7 }}>Call us</p>
+                  <a href={callLink} className="transition-colors hover:opacity-80" style={{ color: footerText }}>
                     +91 {siteSettings.phone}
                   </a>
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <Mail className="w-5 h-5 text-amber-400 mt-0.5" />
+                <Mail className="w-5 h-5 mt-0.5" style={{ color: footerLink }} />
                 <div>
-                  <p className="text-sm text-gray-400">Email us</p>
-                  <a href={`mailto:${siteSettings.email}`} className="text-white hover:text-amber-300 transition-colors">
+                  <p className="text-sm" style={{ color: footerText, opacity: 0.7 }}>Email us</p>
+                  <a href={`mailto:${siteSettings.email}`} className="transition-colors hover:opacity-80" style={{ color: footerText }}>
                     {siteSettings.email}
                   </a>
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-amber-400 mt-0.5" />
+                <MapPin className="w-5 h-5 mt-0.5" style={{ color: footerLink }} />
                 <div>
-                  <p className="text-sm text-gray-400">Visit us</p>
-                  <p className="text-white text-sm">{siteSettings.address}</p>
+                  <p className="text-sm" style={{ color: footerText, opacity: 0.7 }}>Visit us</p>
+                  <p className="text-sm" style={{ color: footerText }}>{siteSettings.address}</p>
                 </div>
               </li>
             </ul>
@@ -131,19 +140,20 @@ const Footer = () => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-amber-900">
+      <div className="border-t" style={{ borderColor: footerLink, opacity: 0.3 }}>
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-400 text-sm">
+            <p className="text-sm" style={{ color: footerText, opacity: 0.7 }}>
               © 2025 {siteSettings.businessName}. All rights reserved.
             </p>
-            <p className="text-gray-400 text-sm">
+            <p className="text-sm" style={{ color: footerText, opacity: 0.7 }}>
               Designed and hosted by{' '}
               <a 
                 href="https://statell.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-amber-400 hover:text-amber-300 transition-colors"
+                className="transition-colors hover:opacity-80"
+                style={{ color: footerLink }}
               >
                 Statell Marketing
               </a>
