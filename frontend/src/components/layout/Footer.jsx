@@ -9,6 +9,14 @@ const Footer = () => {
   const LOGO_URL = siteSettings.logo || "https://customer-assets.emergentagent.com/job_70b8c44d-b0eb-46ab-b798-c90870274405/artifacts/5olvlaa7_WhatsApp%20Image%202025-12-26%20at%2013.46.33.jpeg";
   const callLink = `tel:+91${siteSettings.phone}`;
 
+  // Social media links from settings
+  const socialLinks = [
+    { icon: Facebook, link: siteSettings.facebookLink, label: 'Facebook' },
+    { icon: Instagram, link: siteSettings.instagramLink, label: 'Instagram' },
+    { icon: Twitter, link: siteSettings.twitterLink, label: 'Twitter' },
+    { icon: Youtube, link: siteSettings.youtubeLink, label: 'YouTube' }
+  ].filter(social => social.link); // Only show links that are configured
+
   return (
     <footer className="bg-[#2d1810] text-white" id="contact">
       {/* Main Footer */}
@@ -31,20 +39,22 @@ const Footer = () => {
               Premium quality dry fruits, nuts, and seeds delivered to your doorstep. 
               We ensure freshness and quality in every pack.
             </p>
-            <div className="flex gap-3">
-              <a href="#" className="w-10 h-10 bg-amber-700 hover:bg-amber-600 rounded-full flex items-center justify-center transition-colors">
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a href="#" className="w-10 h-10 bg-amber-700 hover:bg-amber-600 rounded-full flex items-center justify-center transition-colors">
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a href="#" className="w-10 h-10 bg-amber-700 hover:bg-amber-600 rounded-full flex items-center justify-center transition-colors">
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a href="#" className="w-10 h-10 bg-amber-700 hover:bg-amber-600 rounded-full flex items-center justify-center transition-colors">
-                <Youtube className="w-5 h-5" />
-              </a>
-            </div>
+            {socialLinks.length > 0 && (
+              <div className="flex gap-3">
+                {socialLinks.map((social, index) => (
+                  <a 
+                    key={index}
+                    href={social.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-amber-700 hover:bg-amber-600 rounded-full flex items-center justify-center transition-colors"
+                    aria-label={social.label}
+                  >
+                    <social.icon className="w-5 h-5" />
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Quick Links */}
