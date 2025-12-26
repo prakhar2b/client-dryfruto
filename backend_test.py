@@ -435,8 +435,25 @@ class BackendTester:
         if not self.test_update_site_settings_benefits(current_settings):
             print("\n❌ Failed to update benefits.")
         
-        # Test 5: Verify persistence
+        # Test 5: Verify bulk order persistence
         self.test_persistence_verification()
+        
+        print("\n" + "=" * 60)
+        print("🎨 THEME CUSTOMIZER TESTS")
+        print("=" * 60)
+        
+        # Test 6: Theme Export API
+        export_data = self.test_theme_export_api()
+        
+        # Test 7: Theme Import API
+        if export_data:
+            self.test_theme_import_api(export_data)
+        
+        # Test 8: Site Settings with Theme
+        self.test_site_settings_with_theme()
+        
+        # Test 9: Theme Persistence
+        self.test_theme_persistence_verification()
         
         # Summary
         print("\n" + "=" * 60)
