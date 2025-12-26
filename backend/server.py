@@ -304,7 +304,7 @@ class SiteSettingsUpdate(BaseModel):
     aboutVision: Optional[str] = None
     aboutVisionPoints: Optional[List[str]] = None
     aboutMission: Optional[str] = None
-    aboutMissionPoints: Optional[List[dict]] = None
+    aboutMissionPoints: Optional[List[str]] = None
     aboutValues: Optional[List[dict]] = None
     aboutWhyChooseUs: Optional[List[dict]] = None
     # Theme Settings
