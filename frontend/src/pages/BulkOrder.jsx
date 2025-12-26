@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { Package, Phone, MessageCircle, CheckCircle, Truck, Shield, Award } from 'lucide-react';
+import { Package, Phone, MessageCircle, CheckCircle, Truck, Shield, Award, Send, Loader2 } from 'lucide-react';
 import { useData } from '../context/DataContext';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
+import axios from 'axios';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 const BulkOrder = () => {
   const { siteSettings } = useData();
@@ -15,6 +19,8 @@ const BulkOrder = () => {
     quantity: '',
     message: ''
   });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const whatsappLink = siteSettings.whatsappLink || `https://wa.me/91${siteSettings.phone}`;
   const callLink = `tel:+91${siteSettings.phone}`;
@@ -22,6 +28,35 @@ const BulkOrder = () => {
   const handleWhatsApp = () => {
     const message = `Hi, I'm interested in bulk ordering.\n\nName: ${formData.name}\nCompany: ${formData.company}\nProduct: ${formData.productType}\nQuantity: ${formData.quantity}\n\nMessage: ${formData.message}`;
     window.open(`${whatsappLink}?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!formData.name || !formData.phone || !formData.productType || !formData.quantity) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await axios.post(`${API}/bulk-orders`, formData);
+      setSubmitted(true);
+      setFormData({
+        name: '',
+        company: '',
+        email: '',
+        phone: '',
+        productType: '',
+        quantity: '',
+        message: ''
+      });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('Error submitting form. Please try again or contact us via WhatsApp.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const benefits = [
@@ -65,101 +100,149 @@ const BulkOrder = () => {
               <div className="bg-white rounded-2xl shadow-lg p-8">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">Request a Quote</h2>
                 
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Your Name *</label>
-                      <input
-                        type="text"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
-                        placeholder="John Doe"
-                      />
+                {submitted ? (
+                  <div className="text-center py-8">
+                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <CheckCircle className="w-8 h-8 text-green-600" />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
-                      <input
-                        type="text"
-                        value={formData.company}
-                        onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
-                        placeholder="Your Company"
-                      />
-                    </div>
+                    <h3 className="text-xl font-semibold text-gray-800 mb-2">Thank You!</h3>
+                    <p className="text-gray-600 mb-4">Your inquiry has been submitted successfully. Our team will contact you shortly.</p>
+                    <button
+                      onClick={() => setSubmitted(false)}
+                      className="text-amber-600 hover:text-amber-700 font-medium"
+                    >
+                      Submit another inquiry
+                    </button>
                   </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Your Name *</label>
+                        <input
+                          type="text"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
+                          placeholder="John Doe"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+                        <input
+                          type="text"
+                          value={formData.company}
+                          onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
+                          placeholder="Your Company"
+                        />
+                      </div>
+                    </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input
+                          type="email"
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
+                          placeholder="email@example.com"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
+                        <input
+                          type="tel"
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
+                          placeholder="9876543210"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Product Type *</label>
+                        <select
+                          value={formData.productType}
+                          onChange={(e) => setFormData({ ...formData, productType: e.target.value })}
+                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
+                          required
+                        >
+                          <option value="">Select Product</option>
+                          <option value="Dry Fruits">Dry Fruits</option>
+                          <option value="Nuts">Nuts</option>
+                          <option value="Seeds">Seeds</option>
+                          <option value="Berries">Berries</option>
+                          <option value="Gift Boxes">Gift Boxes</option>
+                          <option value="Mixed">Mixed Products</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Quantity (in kg) *</label>
+                        <input
+                          type="text"
+                          value={formData.quantity}
+                          onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
+                          placeholder="e.g., 50 kg"
+                          required
+                        />
+                      </div>
+                    </div>
+
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                      <input
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Additional Requirements</label>
+                      <textarea
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                         className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
-                        placeholder="email@example.com"
+                        rows="3"
+                        placeholder="Tell us about your specific requirements..."
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
-                      <input
-                        type="tel"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
-                        placeholder="9876543210"
-                      />
-                    </div>
-                  </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Product Type *</label>
-                      <select
-                        value={formData.productType}
-                        onChange={(e) => setFormData({ ...formData, productType: e.target.value })}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
+                    {/* Submit Buttons */}
+                    <div className="space-y-3">
+                      <button
+                        type="submit"
+                        disabled={submitting}
+                        className="w-full bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
                       >
-                        <option value="">Select Product</option>
-                        <option value="Dry Fruits">Dry Fruits</option>
-                        <option value="Nuts">Nuts</option>
-                        <option value="Seeds">Seeds</option>
-                        <option value="Berries">Berries</option>
-                        <option value="Gift Boxes">Gift Boxes</option>
-                        <option value="Mixed">Mixed Products</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Quantity (in kg) *</label>
-                      <input
-                        type="text"
-                        value={formData.quantity}
-                        onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
-                        placeholder="e.g., 50 kg"
-                      />
-                    </div>
-                  </div>
+                        {submitting ? (
+                          <>
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                            Submitting...
+                          </>
+                        ) : (
+                          <>
+                            <Send className="w-5 h-5" />
+                            Submit Inquiry
+                          </>
+                        )}
+                      </button>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Additional Requirements</label>
-                    <textarea
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
-                      rows="3"
-                      placeholder="Tell us about your specific requirements..."
-                    />
-                  </div>
+                      <div className="flex items-center gap-4">
+                        <div className="flex-1 h-px bg-gray-200"></div>
+                        <span className="text-sm text-gray-500">or</span>
+                        <div className="flex-1 h-px bg-gray-200"></div>
+                      </div>
 
-                  <button
-                    onClick={handleWhatsApp}
-                    className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors"
-                  >
-                    <MessageCircle className="w-5 h-5" />
-                    Send Inquiry via WhatsApp
-                  </button>
-                </div>
+                      <button
+                        type="button"
+                        onClick={handleWhatsApp}
+                        className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors"
+                      >
+                        <MessageCircle className="w-5 h-5" />
+                        Send via WhatsApp
+                      </button>
+                    </div>
+                  </form>
+                )}
               </div>
 
               {/* Contact Info */}
