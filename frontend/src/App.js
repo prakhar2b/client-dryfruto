@@ -5,6 +5,8 @@ import { DataProvider } from "./context/DataContext";
 import Home from "./pages/Home";
 import ProductList from "./pages/ProductList";
 import ProductPage from "./pages/ProductPage";
+import BulkOrder from "./pages/BulkOrder";
+import Career from "./pages/Career";
 import AdminLayout from "./pages/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import FrontendManager from "./pages/admin/FrontendManager";
@@ -21,6 +23,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<ProductList />} />
             <Route path="/product/:slug" element={<ProductPage />} />
+            <Route path="/bulk-order" element={<BulkOrder />} />
+            <Route path="/career" element={<Career />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>
