@@ -73,7 +73,7 @@ const AboutUs = () => {
           <div className="max-w-7xl mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">About {siteSettings.businessName}</h1>
             <p className="text-lg text-amber-200 max-w-2xl mx-auto">
-              Your trusted partner for premium quality dry fruits, nuts, and seeds since 2014.
+              {heroSubtitle}
             </p>
           </div>
         </div>
@@ -85,26 +85,14 @@ const AboutUs = () => {
               <div>
                 <h2 className="text-3xl font-bold text-gray-800 mb-6">Our Story</h2>
                 <div className="space-y-4 text-gray-600">
-                  <p>
-                    {siteSettings.businessName} was born from a simple belief – everyone deserves access to pure, 
-                    high-quality dry fruits at fair prices. What started as a small family business has grown 
-                    into a trusted name in the dry fruits industry.
-                  </p>
-                  <p>
-                    We work directly with farmers and suppliers to bring you the freshest products without 
-                    any middlemen. Our commitment to quality and customer satisfaction has helped us build 
-                    lasting relationships with thousands of families across India.
-                  </p>
-                  <p>
-                    Today, we continue our journey with the same passion and dedication, bringing health 
-                    and happiness to every household through our carefully curated selection of dry fruits, 
-                    nuts, seeds, and berries.
-                  </p>
+                  {storyParagraphs.map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
                 </div>
               </div>
               <div className="bg-amber-50 rounded-2xl p-8">
                 <img 
-                  src="https://images.unsplash.com/photo-1596591868264-6d8f43c0e648?w=600" 
+                  src={storyImage} 
                   alt="Premium Dry Fruits" 
                   className="w-full h-64 object-cover rounded-xl mb-6"
                 />
