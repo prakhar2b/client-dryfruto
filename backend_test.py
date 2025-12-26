@@ -156,7 +156,206 @@ class BackendTester:
             self.log_test("PUT /api/site-settings (benefits)", False, f"Error: {str(e)}")
             return False
     
-    def test_persistence_verification(self) -> bool:
+    def test_theme_export_api(self) -> Dict[Any, Any]:
+        """Test GET /api/export-theme endpoint"""
+        try:
+            response = self.session.get(f"{self.backend_url}/export-theme")
+            
+            if response.status_code != 200:
+                self.log_test("GET /api/export-theme", False, f"Status code: {response.status_code}, Response: {response.text}")
+                return {}
+            
+            # Check Content-Disposition header for download
+            content_disposition = response.headers.get('Content-Disposition', '')
+            if 'attachment' not in content_disposition:
+                self.log_test("GET /api/export-theme", False, "Missing Content-Disposition header for download")
+                return {}
+            
+            # Parse JSON response
+            try:
+                data = response.json()
+            except json.JSONDecodeError:
+                self.log_test("GET /api/export-theme", False, "Response is not valid JSON")
+                return {}
+            
+            # Check required fields in export
+            required_fields = ["exportVersion", "exportDate", "themeName", "siteSettings", "categories", "products", "heroSlides", "testimonials", "giftBoxes"]
+            missing_fields = []
+            
+            for field in required_fields:
+                if field not in data:
+                    missing_fields.append(field)
+            
+            if missing_fields:
+                self.log_test("GET /api/export-theme", False, f"Missing required fields: {missing_fields}")
+                return {}
+            
+            # Verify data types
+            if not isinstance(data["siteSettings"], dict):
+                self.log_test("GET /api/export-theme", False, "siteSettings is not a dict")
+                return {}
+            
+            if not isinstance(data["categories"], list):
+                self.log_test("GET /api/export-theme", False, "categories is not a list")
+                return {}
+            
+            if not isinstance(data["products"], list):
+                self.log_test("GET /api/export-theme", False, "products is not a list")
+                return {}
+            
+            self.log_test("GET /api/export-theme", True, 
+                         f"Export contains {len(data['categories'])} categories, {len(data['products'])} products, theme: {data['themeName']}")
+            
+            return data
+            
+        except requests.exceptions.RequestException as e:
+            self.log_test("GET /api/export-theme", False, f"Request error: {str(e)}")
+            return {}
+        except Exception as e:
+            self.log_test("GET /api/export-theme", False, f"Unexpected error: {str(e)}")
+            return {}
+    
+    def test_theme_import_api(self, export_data: Dict[Any, Any]) -> bool:
+        """Test POST /api/import-theme endpoint"""
+        try:
+            if not export_data:
+                self.log_test("POST /api/import-theme", False, "No export data available for import test")
+                return False
+            
+            # Modify the theme data slightly to test import
+            modified_data = export_data.copy()
+            if "siteSettings" in modified_data and "theme" in modified_data["siteSettings"]:
+                # Change accent color to test theme import
+                modified_data["siteSettings"]["theme"]["colors"]["accent"] = "#e11d48"
+                modified_data["themeName"] = "Test Import Theme"
+            
+            response = self.session.post(
+                f"{self.backend_url}/import-theme",
+                json=modified_data,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code != 200:
+                self.log_test("POST /api/import-theme", False, 
+                             f"Status code: {response.status_code}, Response: {response.text}")
+                return False
+            
+            data = response.json()
+            
+            if not data.get("success"):
+                self.log_test("POST /api/import-theme", False, f"Import failed: {data}")
+                return False
+            
+            self.log_test("POST /api/import-theme", True, "Theme import successful")
+            return True
+            
+        except Exception as e:
+            self.log_test("POST /api/import-theme", False, f"Error: {str(e)}")
+            return False
+    
+    def test_site_settings_with_theme(self) -> bool:
+        """Test PUT /api/site-settings with theme configuration"""
+        try:
+            # Test theme configuration update
+            theme_config = {
+                "theme": {
+                    "colors": {
+                        "primary": "#1e40af",
+                        "accent": "#f59e0b",
+                        "background": "#f8fafc"
+                    },
+                    "typography": {
+                        "fontFamily": "Roboto, sans-serif",
+                        "baseFontSize": "18px"
+                    },
+                    "header": {
+                        "background": "#1e40af",
+                        "text": "#ffffff"
+                    },
+                    "footer": {
+                        "background": "#374151",
+                        "text": "#f3f4f6"
+                    },
+                    "buttons": {
+                        "primaryBg": "#f59e0b",
+                        "primaryText": "#ffffff",
+                        "borderRadius": "0.75rem"
+                    },
+                    "cards": {
+                        "background": "#ffffff",
+                        "borderRadius": "1rem",
+                        "shadow": "0 4px 6px rgba(0,0,0,0.1)"
+                    }
+                }
+            }
+            
+            response = self.session.put(
+                f"{self.backend_url}/site-settings",
+                json=theme_config,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code != 200:
+                self.log_test("PUT /api/site-settings (theme)", False, 
+                             f"Status code: {response.status_code}, Response: {response.text}")
+                return False
+            
+            data = response.json()
+            
+            # Verify theme was saved
+            if "theme" not in data:
+                self.log_test("PUT /api/site-settings (theme)", False, "Theme field not found in response")
+                return False
+            
+            saved_theme = data["theme"]
+            
+            # Check if our test values were saved
+            if saved_theme.get("colors", {}).get("primary") != "#1e40af":
+                self.log_test("PUT /api/site-settings (theme)", False, "Primary color not saved correctly")
+                return False
+            
+            if saved_theme.get("typography", {}).get("fontFamily") != "Roboto, sans-serif":
+                self.log_test("PUT /api/site-settings (theme)", False, "Font family not saved correctly")
+                return False
+            
+            self.log_test("PUT /api/site-settings (theme)", True, "Theme configuration saved successfully")
+            return True
+            
+        except Exception as e:
+            self.log_test("PUT /api/site-settings (theme)", False, f"Error: {str(e)}")
+            return False
+    
+    def test_theme_persistence_verification(self) -> bool:
+        """Test that theme changes persist by making a fresh GET request"""
+        try:
+            response = self.session.get(f"{self.backend_url}/site-settings")
+            
+            if response.status_code != 200:
+                self.log_test("Theme persistence verification", False, f"Status code: {response.status_code}")
+                return False
+            
+            data = response.json()
+            
+            # Check if our theme changes are still there
+            theme = data.get("theme", {})
+            
+            primary_color = theme.get("colors", {}).get("primary")
+            font_family = theme.get("typography", {}).get("fontFamily")
+            
+            if primary_color != "#1e40af":
+                self.log_test("Theme persistence verification", False, f"Primary color not persisted. Found: {primary_color}")
+                return False
+            
+            if font_family != "Roboto, sans-serif":
+                self.log_test("Theme persistence verification", False, f"Font family not persisted. Found: {font_family}")
+                return False
+            
+            self.log_test("Theme persistence verification", True, "Theme changes persisted successfully")
+            return True
+            
+        except Exception as e:
+            self.log_test("Theme persistence verification", False, f"Error: {str(e)}")
+            return False
         """Test that changes persist by making a fresh GET request"""
         try:
             response = self.session.get(f"{self.backend_url}/site-settings")
