@@ -92,7 +92,7 @@ REACT_APP_BACKEND_URL=http://${DOMAIN}
 EOF
 
 # Install npm dependencies and build
-npm install
+npm install --legacy-peer-deps
 npm run build
 
 # Configure Nginx
