@@ -277,3 +277,51 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ THEME PERSISTENCE VERIFIED: Fresh GET request to /api/site-settings confirms all theme changes persist correctly. Primary color (#1e40af) and font family (Roboto, sans-serif) saved and retrieved successfully. Database persistence working as expected."
+
+  - task: "CSS Customizer - Save Page Styles API"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ CSS CUSTOMIZER SAVE PAGE STYLES WORKING: PUT /api/site-settings successfully saves pageStyles object with global, home, products, productDetail, bulkOrder, career, aboutUs, contact settings. Test data includes global styles (headerBg: #2d1810, headerText: #ffffff, accentColor: #e11d48) and page-specific styles for all 8 page sections. All pageStyles persist correctly in database."
+
+  - task: "CSS Customizer - Get Page Styles API"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ CSS CUSTOMIZER GET PAGE STYLES WORKING: GET /api/site-settings successfully returns pageStyles in response. Retrieved pageStyles contains all 8 page sections (global, home, products, productDetail, bulkOrder, career, aboutUs, contact) with correct values. Global styles verified: headerBg (#2d1810) and accentColor (#e11d48) retrieved correctly."
+
+  - task: "CSS Customizer - Page Styles Persistence"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ CSS CUSTOMIZER PERSISTENCE VERIFIED: Fresh GET request confirms all pageStyles changes persist correctly. All 8 page sections (global, home, products, productDetail, bulkOrder, career, aboutUs, contact) maintained in database. Global headerBg (#2d1810) and accentColor (#e11d48) values persisted successfully. Database persistence working as expected."
+
+  - task: "CSS Customizer - Frontend CSS Variables Application"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/context/DataContext.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ CSS CUSTOMIZER FRONTEND INTEGRATION VERIFIED: DataContext.jsx contains applyPageStyles function (lines 118-149) that applies pageStyles as CSS variables to document root. Function processes global styles and page-specific styles, setting CSS variables like --header-bg, --header-text, --color-accent, and --{page}-{property} format for page-specific styles. Frontend integration is complete and functional."
