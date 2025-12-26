@@ -8,6 +8,7 @@ import ProductList from "./pages/ProductList";
 import ProductPage from "./pages/ProductPage";
 import BulkOrder from "./pages/BulkOrder";
 import Career from "./pages/Career";
+import AboutUs from "./pages/AboutUs";
 import AdminLayout from "./pages/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import FrontendManager from "./pages/admin/FrontendManager";
@@ -28,6 +29,7 @@ function App() {
             <Route path="/product/:slug" element={<ProductPage />} />
             <Route path="/bulk-order" element={<BulkOrder />} />
             <Route path="/career" element={<Career />} />
+            <Route path="/about" element={<AboutUs />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>
