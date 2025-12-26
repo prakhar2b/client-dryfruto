@@ -12,6 +12,7 @@ import Dashboard from "./pages/admin/Dashboard";
 import FrontendManager from "./pages/admin/FrontendManager";
 import ProductsManager from "./pages/admin/ProductsManager";
 import SettingsManager from "./pages/admin/SettingsManager";
+import SubmissionsManager from "./pages/admin/SubmissionsManager";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
               <Route index element={<Dashboard />} />
               <Route path="frontend" element={<FrontendManager />} />
               <Route path="products" element={<ProductsManager />} />
+              <Route path="submissions" element={<SubmissionsManager />} />
               <Route path="settings" element={<SettingsManager />} />
             </Route>
           </Routes>
