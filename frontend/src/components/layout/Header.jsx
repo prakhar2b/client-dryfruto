@@ -51,7 +51,7 @@ const Header = () => {
               </Link>
               <div className="relative group">
                 <button className="text-white hover:text-amber-300 transition-colors font-medium flex items-center gap-1">
-                  Categories
+                  Shop
                   <svg className="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
@@ -68,11 +68,11 @@ const Header = () => {
                   ))}
                 </div>
               </div>
-              <Link to="/products" className="text-white hover:text-amber-300 transition-colors font-medium">
-                All Products
+              <Link to="/bulk-order" className="text-white hover:text-amber-300 transition-colors font-medium">
+                Bulk Order
               </Link>
-              <Link to="/products?category=gift-boxes" className="text-white hover:text-amber-300 transition-colors font-medium">
-                Gift Boxes
+              <Link to="/career" className="text-white hover:text-amber-300 transition-colors font-medium">
+                Career
               </Link>
               <a href="#about" className="text-white hover:text-amber-300 transition-colors font-medium">
                 About Us
@@ -105,7 +105,7 @@ const Header = () => {
                   Home
                 </Link>
                 <div className="border-t border-amber-900 pt-2">
-                  <p className="text-amber-400 text-sm font-medium mb-2">Categories</p>
+                  <p className="text-amber-400 text-sm font-medium mb-2">Shop</p>
                   {categories.map((cat) => (
                     <Link
                       key={cat.id}
@@ -118,19 +118,33 @@ const Header = () => {
                   ))}
                 </div>
                 <Link 
-                  to="/products" 
+                  to="/bulk-order" 
                   className="text-white hover:text-amber-300 py-2 border-t border-amber-900 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  All Products
+                  Bulk Order
                 </Link>
                 <Link 
-                  to="/products?category=gift-boxes" 
+                  to="/career" 
                   className="text-white hover:text-amber-300 py-2 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Gift Boxes
+                  Career
                 </Link>
+                <a 
+                  href="#about" 
+                  className="text-white hover:text-amber-300 py-2 border-t border-amber-900 transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  About Us
+                </a>
+                <a 
+                  href="#contact" 
+                  className="text-white hover:text-amber-300 py-2 transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Contact
+                </a>
               </nav>
             </div>
           </div>
