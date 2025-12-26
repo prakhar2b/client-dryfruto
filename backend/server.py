@@ -174,6 +174,10 @@ class SiteSettings(BaseModel):
     email: str = "info@dryfruto.com"
     address: str = "123, Main Street, New Delhi, India"
     whatsappLink: str = "https://wa.me/919870990795"
+    facebookLink: str = ""
+    instagramLink: str = ""
+    twitterLink: str = ""
+    youtubeLink: str = ""
 
 class SiteSettingsUpdate(BaseModel):
     businessName: Optional[str] = None
@@ -183,6 +187,10 @@ class SiteSettingsUpdate(BaseModel):
     email: Optional[str] = None
     address: Optional[str] = None
     whatsappLink: Optional[str] = None
+    facebookLink: Optional[str] = None
+    instagramLink: Optional[str] = None
+    twitterLink: Optional[str] = None
+    youtubeLink: Optional[str] = None
 
 # ============== ROUTES ==============
 
