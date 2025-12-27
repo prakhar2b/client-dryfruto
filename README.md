@@ -4,21 +4,32 @@ A full-stack e-commerce application for selling premium dry fruits, nuts, and se
 
 ## Tech Stack
 
-- **Frontend:** React + TailwindCSS
+- **Frontend:** React + TailwindCSS + Shadcn UI
 - **Backend:** FastAPI (Python)
-- **Database:** MongoDB
-- **Server:** Nginx
+- **Database:** MongoDB 6.0
+- **Server:** Nginx (Reverse Proxy)
+- **Containerization:** Docker + Docker Compose
 
 ## Deploy on Hostinger VPS with Docker Manager
 
 ### Prerequisites
 - Hostinger VPS with Docker Manager enabled
 - GitHub repository with this code
+- Domain name pointed to your VPS IP (optional but recommended)
 
 ### Deployment Steps
 
 1. **Push code to GitHub**
-   - Make sure all files including `docker-compose.yml` are in your repository
+   ```bash
+   git add .
+   git commit -m "Ready for deployment"
+   git push origin main
+   ```
+   Make sure all Docker files are in your repository root:
+   - `docker-compose.yml`
+   - `Dockerfile.backend`
+   - `Dockerfile.nginx`
+   - `nginx.conf`
 
 2. **In Hostinger VPS Panel:**
    - Go to **Docker** → **Docker Compose**
@@ -29,11 +40,12 @@ A full-stack e-commerce application for selling premium dry fruits, nuts, and se
    - Click **Deploy**
 
 3. **Wait for deployment**
-   - Hostinger will pull the code and run `docker-compose up`
-   - This may take 5-10 minutes for the first deployment
+   - Hostinger will pull the code and run `docker-compose up -d --build`
+   - First deployment may take 5-10 minutes (downloading images, building)
 
 4. **Access your site**
-   - Your site will be available at your VPS IP or configured domain
+   - Your site will be available at your VPS IP: `http://YOUR_VPS_IP`
+   - Or your domain: `http://your-domain.com`
    - Admin panel: `http://your-domain/admin`
 
 ## Docker Services
