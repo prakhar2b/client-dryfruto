@@ -3,20 +3,17 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files first for better caching
-COPY frontend/package.json ./
+# Copy all frontend files first
+COPY frontend/ .
 
 # Install dependencies using npm with legacy peer deps
 RUN npm install --legacy-peer-deps
 
-# Copy frontend source
-COPY frontend/ .
-
 # Set the backend URL to empty (nginx will proxy /api requests)
 ENV REACT_APP_BACKEND_URL=
 
-# Build the React app
-RUN npm run build
+# Build the React app using react-scripts directly (bypasses craco)
+RUN npx react-scripts build
 
 # Production stage with Nginx
 FROM nginx:alpine
