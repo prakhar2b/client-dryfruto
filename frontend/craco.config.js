@@ -1,35 +1,45 @@
 // craco.config.js
 const path = require("path");
-require("dotenv").config();
 
 // Check if we're in development/preview mode (not production build)
-// Craco sets NODE_ENV=development for start, NODE_ENV=production for build
 const isDevServer = process.env.NODE_ENV !== "production";
+
+// Check if plugins directory exists (for local development only)
+const fs = require("fs");
+const pluginsExist = fs.existsSync(path.resolve(__dirname, "plugins"));
 
 // Environment variable overrides
 const config = {
-  enableHealthCheck: process.env.ENABLE_HEALTH_CHECK === "true",
-  enableVisualEdits: isDevServer, // Only enable during dev server
+  enableHealthCheck: process.env.ENABLE_HEALTH_CHECK === "true" && pluginsExist,
+  enableVisualEdits: isDevServer && pluginsExist,
 };
 
-// Conditionally load visual edits modules only in dev mode
+// Conditionally load visual edits modules only in dev mode and if plugins exist
 let setupDevServer;
 let babelMetadataPlugin;
 
 if (config.enableVisualEdits) {
-  setupDevServer = require("./plugins/visual-edits/dev-server-setup");
-  babelMetadataPlugin = require("./plugins/visual-edits/babel-metadata-plugin");
+  try {
+    setupDevServer = require("./plugins/visual-edits/dev-server-setup");
+    babelMetadataPlugin = require("./plugins/visual-edits/babel-metadata-plugin");
+  } catch (e) {
+    console.log("Visual edits plugins not found, skipping...");
+  }
 }
 
-// Conditionally load health check modules only if enabled
+// Conditionally load health check modules only if enabled and plugins exist
 let WebpackHealthPlugin;
 let setupHealthEndpoints;
 let healthPluginInstance;
 
 if (config.enableHealthCheck) {
-  WebpackHealthPlugin = require("./plugins/health-check/webpack-health-plugin");
-  setupHealthEndpoints = require("./plugins/health-check/health-endpoints");
-  healthPluginInstance = new WebpackHealthPlugin();
+  try {
+    WebpackHealthPlugin = require("./plugins/health-check/webpack-health-plugin");
+    setupHealthEndpoints = require("./plugins/health-check/health-endpoints");
+    healthPluginInstance = new WebpackHealthPlugin();
+  } catch (e) {
+    console.log("Health check plugins not found, skipping...");
+  }
 }
 
 const webpackConfig = {
@@ -47,17 +57,16 @@ const webpackConfig = {
       '@': path.resolve(__dirname, 'src'),
     },
     configure: (webpackConfig) => {
-
       // Add ignored patterns to reduce watched directories
-        webpackConfig.watchOptions = {
-          ...webpackConfig.watchOptions,
-          ignored: [
-            '**/node_modules/**',
-            '**/.git/**',
-            '**/build/**',
-            '**/dist/**',
-            '**/coverage/**',
-            '**/public/**',
+      webpackConfig.watchOptions = {
+        ...webpackConfig.watchOptions,
+        ignored: [
+          '**/node_modules/**',
+          '**/.git/**',
+          '**/build/**',
+          '**/dist/**',
+          '**/coverage/**',
+          '**/public/**',
         ],
       };
 
