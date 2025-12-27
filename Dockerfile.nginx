@@ -1,5 +1,5 @@
 # Nginx Dockerfile - Serves frontend and proxies API
-FROM node:18-alpine AS builder
+FROM node:14-alpine AS builder
 
 WORKDIR /app
 
