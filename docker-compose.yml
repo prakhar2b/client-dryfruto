@@ -2,14 +2,14 @@ services:
   # MongoDB Database
   mongodb:
     image: mongo:6.0
-    container_name: dryfruto-mongodb
+    container_name: dryfruto-mongodb2
     restart: always
     volumes:
       - mongodb_data:/data/db
     networks:
-      - dryfruto-network
+      - dryfruto-network2
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27018/test --quiet
       interval: 10s
       timeout: 5s
       retries: 5
@@ -19,11 +19,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.backend
-    container_name: dryfruto-backend
+    container_name: dryfruto-backend2
     restart: always
     environment:
-      - MONGO_URL=mongodb://mongodb:27017
-      - DB_NAME=dryfruto
+      - MONGO_URL=mongodb://mongodb:27018
+      - DB_NAME=dryfruto2
     volumes:
       - uploads_data:/app/uploads
     depends_on:
@@ -37,16 +37,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.nginx
-    container_name: dryfruto-nginx
+    container_name: dryfruto-nginx2
     restart: always
     ports:
-      - "80:80"
+      - "8081:80"
     volumes:
       - uploads_data:/var/www/uploads:ro
     depends_on:
       - backend
     networks:
-      - dryfruto-network
+      - dryfruto-network2
 
 volumes:
   mongodb_data:
