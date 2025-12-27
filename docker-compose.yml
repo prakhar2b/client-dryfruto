@@ -9,7 +9,7 @@ services:
     networks:
       - dryfruto-network
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27018/test --quiet
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 10s
       timeout: 5s
       retries: 5
@@ -22,7 +22,7 @@ services:
     container_name: dryfruto-backend2
     restart: always
     environment:
-      - MONGO_URL=mongodb://mongodb:27018
+      - MONGO_URL=mongodb://mongodb:27017
       - DB_NAME=dryfruto2
     volumes:
       - uploads_data:/app/uploads
