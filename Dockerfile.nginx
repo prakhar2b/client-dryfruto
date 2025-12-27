@@ -4,19 +4,19 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Copy package files
-COPY frontend/package*.json ./
+COPY frontend/package.json frontend/yarn.lock ./
 
-# Install dependencies
-RUN npm install --legacy-peer-deps
+# Install dependencies using yarn
+RUN yarn install --frozen-lockfile
 
 # Copy frontend source
 COPY frontend/ .
 
-# Set the backend URL (will be proxied through nginx)
+# Set the backend URL to empty (nginx will proxy /api requests)
 ENV REACT_APP_BACKEND_URL=
 
 # Build the React app
-RUN npm run build
+RUN yarn build
 
 # Production stage with Nginx
 FROM nginx:alpine

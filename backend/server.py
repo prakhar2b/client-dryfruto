@@ -755,6 +755,12 @@ async def import_theme(import_data: dict):
         logging.error(f"Import error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+# Health check endpoint for Docker
+@api_router.get("/health")
+async def health_check():
+    """Health check endpoint for Docker container health monitoring"""
+    return {"status": "healthy", "service": "dryfruto-backend"}
+
 # Include the router in the main app
 app.include_router(api_router)
 
