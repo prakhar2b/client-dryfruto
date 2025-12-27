@@ -7,7 +7,7 @@ services:
     volumes:
       - mongodb_data:/data/db
     networks:
-      - dryfruto-network2
+      - dryfruto-network
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27018/test --quiet
       interval: 10s
@@ -46,7 +46,7 @@ services:
     depends_on:
       - backend
     networks:
-      - dryfruto-network2
+      - dryfruto-network
 
 volumes:
   mongodb_data:
